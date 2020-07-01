@@ -1,2 +1,6 @@
 wallet.json
 node_modules
+.deployment
+.env
+.vscode
+.gitignore
