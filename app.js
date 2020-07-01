@@ -9,12 +9,10 @@ const tokenStakingABI = require("@keep-network/keep-core/artifacts/TokenStaking.
 const randomBeaconOperatorABI = require('@keep-network/keep-core/artifacts/KeepRandomBeaconOperator.json');
 const keepTokenABI = require('@keep-network/keep-core/artifacts/KeepToken.json');
 const tokenGrantABI = require('@keep-network/keep-core/artifacts/TokenGrant.json');
+const managedGrantFactoryABI = require('@keep-network/keep-core/artifacts/ManagedGrantFactory.json');
+const managedGrantABI = require('@keep-network/keep-core/artifacts/ManagedGrant.json');
 const dotenv = require('dotenv');
 const express = require("express")
-
-
-const db = require("./db/db")
-
 
 const Web3 = require('web3');
 const BigNumber = require('bignumber.js');
@@ -44,11 +42,23 @@ let infuraWS = isTestnet
 //initialise web3Context
 const web3 = new Web3(new Web3.providers.WebsocketProvider(infuraWS, options));
 const staking = new web3.eth.Contract(tokenStakingABI.abi, tokenStakingABI.networks["3"].address);
-//const operator = new web3.eth.Contract(randomBeaconOperatorABI.abi, randomBeaconOperatorABI.networks["3"].address);
+const operator = new web3.eth.Contract(randomBeaconOperatorABI.abi, randomBeaconOperatorABI.networks["3"].address);
 const keepTokenGrant = new web3.eth.Contract(tokenGrantABI.abi, tokenGrantABI.networks["3"].address);
+const keepToken = new web3.eth.Contract(keepTokenABI.abi, keepTokenABI.networks["3"].address);
+const managedGrantFactory = new web3.eth.Contract(managedGrantFactoryABI.abi, managedGrantFactoryABI.networks["3"].address);
+const managedGrant = new web3.eth.Contract(managedGrantFactoryABI.abi, managedGrantFactoryABI.networks["3"].address);
+
+const objList = {
+  stakingContract: staking, 
+  tokenGrantContract: keepTokenGrant, 
+  Web3Obj: web3,
+  tokenContract: keepToken,
+  managedGrantFactoryContract: managedGrantFactory,
+  managedGrantContract: managedGrant
+}
 
 //(stakingContract, grantContract, web3)
-let stakingRouter = require('./modules/staking.route')(staking, keepTokenGrant, web3);
+let router = require('./modules/router')(objList);
 
 
 
@@ -56,7 +66,7 @@ let stakingRouter = require('./modules/staking.route')(staking, keepTokenGrant, 
 const app = express();
 // get all todos
 
-app.use('/', stakingRouter);
+app.use('/', router);
 
 // app.get('/', function (req, res) {
 //   res.send('Welcome to KEEP API');
