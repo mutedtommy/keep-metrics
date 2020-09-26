@@ -3,3 +3,5 @@ node_modules
 .deployment
 .env
 .vscode
+.node-persist
+.deployment

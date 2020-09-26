@@ -1,6 +1,7 @@
-import moment from "moment"
-import web3Utils from "web3-utils"
+const moment = require('moment')
+const web3Utils = require('web3-utils')
 
+//dont export
 moment.updateLocale("en", {
   relativeTime: {
     d: "1 day",
@@ -15,7 +16,7 @@ moment.updateLocale("en", {
   },
 })
 
-export const shortenAddress = (address) => {
+const shortenAddress = (address) => {
   if (!address) {
     return ""
   }
@@ -31,37 +32,47 @@ export const shortenAddress = (address) => {
     .concat(lastFourCharacters)
 }
 
-export const wait = (ms) => {
+const wait = (ms) => {
   return new Promise((resolve) => {
     return setTimeout(resolve, ms)
   })
 }
 
-export const formatDate = (dateMillis, format = "MM/DD/YYYY") => {
+const formatDate = (dateMillis, format = "MM/DD/YYYY") => {
   const date = moment(dateMillis)
 
   return date.format(format)
 }
 
-export const isEmptyObj = (obj) =>
+const isEmptyObj = (obj) =>
   Object.keys(obj).length === 0 && obj.constructor === Object
 
-export const isSameEthAddress = (address1, address2) => {
+const isSameEthAddress = (address1, address2) => {
   return (
     web3Utils.toChecksumAddress(address1) ===
     web3Utils.toChecksumAddress(address2)
   )
 }
 
-export const getBufferFromHex = (hex) => {
+const getBufferFromHex = (hex) => {
   const validHex = toValidHex(hex).toLowerCase()
   return new Buffer(validHex, "hex")
 }
 
+// dont export
 const toValidHex = (hex) => {
   hex = hex.substring(0, 2) === "0x" ? hex.substring(2) : hex
   if (hex === "") {
     return ""
   }
   return hex.length % 2 !== 0 ? `0${hex}` : hex
+}
+
+module.exports = {
+  shortenAddress,
+  wait,
+  formatDate,
+  isEmptyObj,
+  isSameEthAddress,
+  getBufferFromHex
 }

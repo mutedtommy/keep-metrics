@@ -1,4 +1,5 @@
-import BigNumber from "bignumber.js"
+//import BigNumber from "bignumber.js"
+const BigNumber = require('bignumber.js')
 
 const metrics = [
   { divisor: 1, symbol: "" },
@@ -6,7 +7,7 @@ const metrics = [
   { divisor: 1e6, symbol: "M" },
 ]
 
-export function displayAmount(amount, withCommaSeparator = true) {
+function displayAmount(amount, withCommaSeparator = true) {
   if (amount) {
     const readableFormat = toTokenUnit(amount)
     return withCommaSeparator
@@ -22,7 +23,8 @@ export function displayAmount(amount, withCommaSeparator = true) {
  *
  * @return {BigNumber} amount in token units
  */
-export const toTokenUnit = (amount) => {
+
+const toTokenUnit = (amount) => {
   if (!amount) {
     return new BigNumber(0)
   }
@@ -36,7 +38,7 @@ export const toTokenUnit = (amount) => {
  *
  * @return {BigNumber} amount in wei
  */
-export function fromTokenUnit(amount, decimals = 18) {
+function fromTokenUnit(amount, decimals = 18) {
   amount = new BigNumber(amount)
   return amount.times(new BigNumber(10).pow(new BigNumber(decimals)))
 }
@@ -57,7 +59,7 @@ export function fromTokenUnit(amount, decimals = 18) {
  *
  * @return {NumebrWithSuffix}
  */
-export const getNumberWithMetricSuffix = (number) => {
+const getNumberWithMetricSuffix = (number) => {
   const bigNumber = new BigNumber(number)
   let metric
   for (let i = metrics.length - 1; i >= 0; i--) {
@@ -81,6 +83,14 @@ export const getNumberWithMetricSuffix = (number) => {
   }
 }
 
-export const displayAmountWithMetricSuffix = (amount) => {
+const displayAmountWithMetricSuffix = (amount) => {
   return getNumberWithMetricSuffix(toTokenUnit(amount)).formattedValue
+}
+
+module.exports = {
+  displayAmount,
+  toTokenUnit,
+  fromTokenUnit,
+  getNumberWithMetricSuffix,
+  displayAmountWithMetricSuffix
 }

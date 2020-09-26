@@ -1,6 +1,6 @@
-import web3Utils from "web3-utils"
+const web3Utils = require('web3-utils')
 
-export const add = (a, b) => {
+const add = (a, b) => {
   return web3Utils.toBN(a).add(web3Utils.toBN(b))
 }
 
@@ -24,4 +24,14 @@ export const lt = (a, b) => {
 
 export const lte = (a, b) => {
   return web3Utils.toBN(a).lte(web3Utils.toBN(b))
+}
+
+module.exports = {
+  add,
+  sub,
+  mul,
+  gt,
+  gte,
+  lt,
+  lte
 }
