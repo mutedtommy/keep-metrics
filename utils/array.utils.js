@@ -1,6 +1,6 @@
-import { isSameEthAddress } from "./general.utils"
+const { isSameEthAddress } = require('./general.utils')
 
-export const findIndexAndObject = (
+const findIndexAndObject = (
   propertyName,
   value,
   array,
@@ -23,7 +23,14 @@ export const findIndexAndObject = (
 const defaultComparisonFunction = (object, propertyName, value) =>
   object[propertyName] === value
 
-export const compareEthAddresses = (object, propertyName, value) =>
+
+const compareEthAddresses = (object, propertyName, value) =>
   isSameEthAddress(object[propertyName], value)
 
-export const isEmptyArray = (array) => !(Array.isArray(array) && array.length)
+const isEmptyArray = (array) => !(Array.isArray(array) && array.length)
+
+module.exports = {
+  findIndexAndObject,
+  compareEthAddresses,
+  isEmptyArray
+}
