@@ -110,19 +110,22 @@ const keepDetails = async (keepIds, objList, metricsObj) => {
       // }else{
       //   //metricsObj.collateralStats.labels({ deposit_state: String(depositState), lot_size: Number(tdtLotSize) }).observe(Number(r))
       // }
+
+      metricsObj.collateralStats.set({ deposit_state: `${depositState}`, lot_size: Number(tdtLotSize), deposit_id: String(d.address)  }, Number(r))
+
       
-      if (depositState == 'REDEEMED'){ 
-        //metricsObj.redeemGauge.set(1)
-        //metricsObj.redeemGauge.set({ deposit_state: `${depositState}` }, Number(tdtLotSize))
-        metricsObj.redeemStats.labels(depositState).inc(Number(tdtLotSize))
-      }else if(depositState == 'FAILED_SETUP'){
-        metricsObj.redeemStats.labels(depositState).inc(Number(tdtLotSize))
-      }else if(depositState == 'LIQUIDATED'){
-        metricsObj.redeemStats.labels(depositState).inc(Number(tdtLotSize))
-      }else{
-        metricsObj.collateralStats.set({ deposit_state: `${depositState}`, lot_size: Number(tdtLotSize), deposit_id: String(d.address)  }, Number(r))
-        //metricsObj.redeemGauge.labels(`${String(depositState)}`).observe(Number(tdtLotSize))
-      }
+      // if (depositState == 'REDEEMED'){ 
+      //   //metricsObj.redeemGauge.set(1)
+      //   //metricsObj.redeemGauge.set({ deposit_state: `${depositState}` }, Number(tdtLotSize))
+      //   metricsObj.redeemStats.labels(depositState).inc(Number(tdtLotSize))
+      // }else if(depositState == 'FAILED_SETUP'){
+      //   metricsObj.redeemStats.labels(depositState).inc(Number(tdtLotSize))
+      // }else if(depositState == 'LIQUIDATED'){
+      //   metricsObj.redeemStats.labels(depositState).inc(Number(tdtLotSize))
+      // }else{
+      //   metricsObj.collateralStats.set({ deposit_state: `${depositState}`, lot_size: Number(tdtLotSize), deposit_id: String(d.address)  }, Number(r))
+      //   //metricsObj.redeemGauge.labels(`${String(depositState)}`).observe(Number(tdtLotSize))
+      // }
   }
   metricsObj.openKeeps.set(Number(openCounter));
   metricsObj.closedKeeps.set(Number(closedCounter));
