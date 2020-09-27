@@ -54,8 +54,8 @@ const keepDetails = async (keepIds, objList, metricsObj) => {
   const ethers = objList.ethers;
   const bondedEcdsaABI = objList.bondedEcdsaKeepABI;
   const ip = objList.ip;
-  // const depositLogContract = objList.depositLog;
-  // const depositAbi = objList.depositAbi;
+  const depositLogContract = objList.depositLog;
+  const depositAbi = objList.depositAbi;
   var openCounter = 0;
   var closedCounter = 0;
   var obj = { my: "Special", variable: 42 };
@@ -85,20 +85,44 @@ const keepDetails = async (keepIds, objList, metricsObj) => {
 
 
 
-    // const tdt = await depositLogContract.queryFilter(depositLogContract.filters.Created(null, addr));
-		// 	if (tdt.length < 1) { continue; }
-    //   const d = new ethers.Contract(tdt[0].args[0], depositAbi.abi, ip);
-    //   const depositState = states[await d.currentState()];
-    //   //if (depositState != 'ACTIVE') { continue; }
-    //   const r = await d.collateralizationPercentage()
-    //   const tdtLotSize = ethers.utils.formatEther(await d.lotSizeTbtc());
-    //   console.log(`TDT Lot Size ${tdtLotSize}, Deposit State: ${depositState}, Collateral Ratio: ${Number(r)}`)
+    const tdt = await depositLogContract.queryFilter(depositLogContract.filters.Created(null, addr));
+			if (tdt.length < 1) { continue; }
+      const d = new ethers.Contract(tdt[0].args[0], depositAbi.abi, ip);
+      const depositState = states[await d.currentState()];
+
+      // const depositStatus = await objList.storage.getItem(d.address)
+
+      // if (depositStatus != undefined){
+        
+      // }
+
+
+
+      //if (depositState != 'ACTIVE') { continue; }
+      const r = await d.collateralizationPercentage()
+      const tdtLotSize = ethers.utils.formatEther(await d.lotSizeTbtc());
+      console.log(`TDT Lot Size ${tdtLotSize}, Deposit State: ${depositState}, Collateral Ratio: ${Number(r)}`)
+
       
-    //   if (depositState != 'REDEEMED'){ 
-    //     metricsObj.collateralHistogram.labels(`${String(depositState)}`).observe(Number(r)) 
-    //   }else{
-    //     metricsObj.redeemHistogram.labels(`${String(depositState)}`).observe(Number(tdtLotSize))
-    //   }
+
+      // if (depositState == 'REDEEMED' || depositState == 'FAILED_SETUP' || depositState == 'LIQUIDATED'){
+      //   metricsObj.redeemStats.labels(String(d.address)).observe(Number(tdtLotSize))
+      // }else{
+      //   //metricsObj.collateralStats.labels({ deposit_state: String(depositState), lot_size: Number(tdtLotSize) }).observe(Number(r))
+      // }
+      
+      if (depositState == 'REDEEMED'){ 
+        //metricsObj.redeemGauge.set(1)
+        //metricsObj.redeemGauge.set({ deposit_state: `${depositState}` }, Number(tdtLotSize))
+        metricsObj.redeemStats.labels(`deposit_state: ${depositState}`).inc(Number())
+      }else if(depositState == 'FAILED_SETUP'){
+        metricsObj.redeemStats.labels(`deposit_state: ${depositState}`).inc(Number())
+      }else if(depositState == 'LIQUIDATED'){
+        metricsObj.redeemStats.labels(`deposit_state: ${depositState}`).inc(Number())
+      }else{
+        metricsObj.collateralStats.set({ deposit_state: `${depositState}`, lot_size: Number(tdtLotSize), deposit_id: String(d.address)  }, Number(r))
+        //metricsObj.redeemGauge.labels(`${String(depositState)}`).observe(Number(tdtLotSize))
+      }
   }
   metricsObj.openKeeps.set(Number(openCounter));
   metricsObj.closedKeeps.set(Number(closedCounter));

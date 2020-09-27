@@ -25,18 +25,18 @@ var routes = function (objList) {
  
 
 
-    // const tBTCRedemptionHistogram = new objList.promClient.Histogram({
-    //     name: 'tbtc_redemption',
-    //     help: 'Monitor tBTC Redemptions on Keep Network',
-    //     labelNames: ['deposit_state'],
-    // });  
+    const tBTCRedemptionGauge = new objList.promClient.Gauge({
+        name: 'tbtc_redemption',
+        help: 'Monitor tBTC Redemptions on Keep Network',
+        labelNames: ['deposit_state']
+    });  
 
     
-    // const collateralHistogram = new objList.promClient.Histogram({
-    //     name: 'collateral_percentage',
-    //     help: 'Monitor collateralisation %age of deposits held by your keeps',
-    //     labelNames: ['deposit_state'],
-    // }); 
+    const collateralGauge = new objList.promClient.Gauge({
+        name: 'collateral_percentage',
+        help: 'Monitor collateralisation %age of deposits held by your keeps',
+        labelNames: ['deposit_state', 'lot_size', 'deposit_id'],
+    }); 
 
     
 
@@ -49,7 +49,9 @@ var routes = function (objList) {
             tBTCSupplyGauge: tBTCSupplyGauge,
             keepsGauge: keepsGauge,
             openKeeps: openKeeps,
-            closedKeeps: closedKeeps
+            closedKeeps: closedKeeps,
+            collateralStats: collateralGauge,
+            redeemStats: tBTCRedemptionGauge
         }
         try {
             //tBTCRedemptionHistogram.observe(0.01);
