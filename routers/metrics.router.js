@@ -28,7 +28,7 @@ var routes = function (objList) {
     const tBTCRedemptionGauge = new objList.promClient.Gauge({
         name: 'tbtc_redemption',
         help: 'Monitor tBTC Redemptions on Keep Network',
-        labelNames: ['deposit_state']
+        labelNames: ['deposit_state', 'deposit_id']
     });  
 
     

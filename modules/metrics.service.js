@@ -112,7 +112,7 @@ const keepDetails = async (keepIds, objList, metricsObj) => {
       // }
 
       metricsObj.collateralStats.set({ deposit_state: `${depositState}`, lot_size: Number(tdtLotSize), deposit_id: String(d.address)  }, Number(r))
-
+      metricsObj.redeemStats.set({ deposit_state: `${depositState}`, deposit_id: String(d.address)  }, Number(Number(tdtLotSize)))
       
       // if (depositState == 'REDEEMED'){ 
       //   //metricsObj.redeemGauge.set(1)
