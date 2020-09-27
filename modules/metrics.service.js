@@ -114,11 +114,11 @@ const keepDetails = async (keepIds, objList, metricsObj) => {
       if (depositState == 'REDEEMED'){ 
         //metricsObj.redeemGauge.set(1)
         //metricsObj.redeemGauge.set({ deposit_state: `${depositState}` }, Number(tdtLotSize))
-        metricsObj.redeemStats.labels(`deposit_state: ${depositState}`).inc(Number())
+        metricsObj.redeemStats.labels(depositState).inc(Number())
       }else if(depositState == 'FAILED_SETUP'){
-        metricsObj.redeemStats.labels(`deposit_state: ${depositState}`).inc(Number())
+        metricsObj.redeemStats.labels(depositState).inc(Number())
       }else if(depositState == 'LIQUIDATED'){
-        metricsObj.redeemStats.labels(`deposit_state: ${depositState}`).inc(Number())
+        metricsObj.redeemStats.labels(depositState).inc(Number())
       }else{
         metricsObj.collateralStats.set({ deposit_state: `${depositState}`, lot_size: Number(tdtLotSize), deposit_id: String(d.address)  }, Number(r))
         //metricsObj.redeemGauge.labels(`${String(depositState)}`).observe(Number(tdtLotSize))
