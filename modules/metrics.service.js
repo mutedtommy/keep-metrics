@@ -84,7 +84,6 @@ const keepDetails = async (keepIds, objList, metricsObj) => {
     } 
 
 
-
     const tdt = await depositLogContract.queryFilter(depositLogContract.filters.Created(null, addr));
 			if (tdt.length < 1) { continue; }
       const d = new ethers.Contract(tdt[0].args[0], depositAbi.abi, ip);
@@ -111,8 +110,12 @@ const keepDetails = async (keepIds, objList, metricsObj) => {
       //   //metricsObj.collateralStats.labels({ deposit_state: String(depositState), lot_size: Number(tdtLotSize) }).observe(Number(r))
       // }
 
-      metricsObj.collateralStats.set({ deposit_state: `${depositState}`, lot_size: Number(tdtLotSize), deposit_id: String(d.address)  }, Number(r))
-      metricsObj.redeemStats.set({ deposit_state: `${depositState}`, deposit_id: String(d.address)  }, Number(Number(tdtLotSize)))
+      //
+      if(depositState == 'REDEEMED'){
+        metricsObj.redeemStats.set({ deposit_state: `${depositState}`, deposit_id: String(d.address)  }, Number(Number(tdtLotSize)))
+      }else if(depositState == 'ACTIVE'){
+        metricsObj.collateralStats.set({ deposit_state: `${depositState}`, lot_size: Number(tdtLotSize), deposit_id: String(d.address)  }, Number(r))
+      }
       
       // if (depositState == 'REDEEMED'){ 
       //   //metricsObj.redeemGauge.set(1)
