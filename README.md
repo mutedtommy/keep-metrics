@@ -3,7 +3,7 @@ Keep ECDSA Metrics for Prometheus
 
 Following env variables are required for the app to work
 ```
-PORT=8080
+PORT=<port number for the node app>
 infura=<infura account id>
 operator=<operator address>
 ```  
