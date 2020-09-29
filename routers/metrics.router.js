@@ -26,14 +26,14 @@ var routes = function (objList) {
 
 
     const tBTCRedemptionGauge = new objList.promClient.Gauge({
-        name: 'deposit_stats',
+        name: 'redeem_stats',
         help: 'Monitor tBTC Redemptions on Keep Network',
         labelNames: ['deposit_state', 'deposit_id']
     });  
 
     
     const collateralGauge = new objList.promClient.Gauge({
-        name: 'collateral_percentage',
+        name: 'collateral_stats',
         help: 'Monitor collateralisation %age of deposits held by your keeps',
         labelNames: ['deposit_state', 'lot_size', 'deposit_id'],
     }); 
