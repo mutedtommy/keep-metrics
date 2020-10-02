@@ -9,14 +9,18 @@ operator=<operator address>
 ```  
 You can run the node application directly by using
 
-`node app.js`
+```bash
+node app.js
+```
 
 Once the app the running the stats would be available at localhost:<port number>/metrics. this end point can be used with prometheus to aggregate the metrics and chart on Grafana.
 
 ## Docker Build
 You can build a docker image from the source code. Following is a sample command.
 
-`sudo docker build -t <image-name> .`
+```bash
+sudo docker build -t <image-name> .
+```
 
 ## Docker Run
 
@@ -26,7 +30,7 @@ The image requires 2 environment variables `operator` address and `infura`projec
 
 Following is the sample command which starts a container and enables http access on port 3000.
 
-```
+```bash
 sudo docker run -d \
 -e infura=08xxxxxxxxxxxxb0b8a8d3cbfff4121c \
 -e operator=0x0xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxg5 \
