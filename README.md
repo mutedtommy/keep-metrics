@@ -7,7 +7,11 @@ PORT=<port number for the node app>
 infura=<infura account id>
 operator=<operator address>
 ```  
-Once the app the running the stats would be available at localhost:8080/metrics. this end point can be used with prometheus to aggregate the metrics and chart on Grafana.
+You can run the node application directly by using
+
+`node app.js`
+
+Once the app the running the stats would be available at localhost:<port number>/metrics. this end point can be used with prometheus to aggregate the metrics and chart on Grafana.
 
 ## Docker Build
 You can build a docker image from the source code. Following is a sample command.
