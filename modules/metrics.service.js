@@ -41,7 +41,8 @@ const mintedTbtc = async (objList, metricsObj) => {
 
 const myKeeps = async (objList, metricsObj) => {
   const opAddr = objList.operator;
-  const bondedEcdsaKeepFactory = objList.bondedEcdsaFactory;
+  //const bondedEcdsaKeepFactory = objList.bondedEcdsaFactory;
+  const bondedEcdsaKeepFactory = new objList.ethers.Contract(objList.bondedEcdsaKeepFactoryABI.networks[1].address, objList.bondedEcdsaKeepFactoryABI.abi, objList.ip);
   const keeps = await bondedEcdsaKeepFactory.queryFilter(bondedEcdsaKeepFactory.filters.BondedECDSAKeepCreated());
 
   const targetKeeps = keeps.filter(ev => { return ev.args[1].filter(ms => { return ms.toLowerCase() === opAddr.toLowerCase()}).length > 0 }).map(ev => { return ev.args[0]; });
@@ -83,34 +84,21 @@ const keepDetails = async (keepIds, objList, metricsObj) => {
       }
     } 
 
+    var d = ""
+    var depositState = ""
+    var r = ""
+    var tdtLotSize = ""
+
+
 
     const tdt = await depositLogContract.queryFilter(depositLogContract.filters.Created(null, addr));
 			if (tdt.length < 1) { continue; }
-      const d = new ethers.Contract(tdt[0].args[0], depositAbi.abi, ip);
-      const depositState = states[await d.currentState()];
-
-      // const depositStatus = await objList.storage.getItem(d.address)
-
-      // if (depositStatus != undefined){
-        
-      // }
-
-
-
-      //if (depositState != 'ACTIVE') { continue; }
-      const r = await d.collateralizationPercentage()
-      const tdtLotSize = ethers.utils.formatEther(await d.lotSizeTbtc());
+       d = new ethers.Contract(tdt[0].args[0], depositAbi.abi, ip);
+       depositState = states[await d.currentState()];
+       r = await d.collateralizationPercentage()
+       tdtLotSize = ethers.utils.formatEther(await d.lotSizeTbtc());
       console.log(`TDT Lot Size ${tdtLotSize}, Deposit State: ${depositState}, Collateral Ratio: ${Number(r)}`)
 
-      
-
-      // if (depositState == 'REDEEMED' || depositState == 'FAILED_SETUP' || depositState == 'LIQUIDATED'){
-      //   metricsObj.redeemStats.labels(String(d.address)).observe(Number(tdtLotSize))
-      // }else{
-      //   //metricsObj.collateralStats.labels({ deposit_state: String(depositState), lot_size: Number(tdtLotSize) }).observe(Number(r))
-      // }
-
-      //
       if(depositState == 'REDEEMED'){
         metricsObj.redeemStats.set({ deposit_state: `${depositState}`, deposit_id: String(d.address)  }, Number(Number(tdtLotSize)))
       }else if(depositState == 'ACTIVE'){

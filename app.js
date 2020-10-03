@@ -100,6 +100,7 @@ const objList = {
   bondedEcdsa: bondedEcdsa,
   bondedEcdsaKeepABI: bondedEcdsaKeepABI,
   bondedEcdsaFactory: bondedEcdsaFactory,
+  bondedEcdsaKeepFactoryABI: bondedEcdsaKeepFactoryABI,
   deposit: deposit,
   depositLog: depositLog,
   depositAbi: depositAbi,
