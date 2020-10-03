@@ -99,10 +99,30 @@ const keepDetails = async (keepIds, objList, metricsObj) => {
        tdtLotSize = ethers.utils.formatEther(await d.lotSizeTbtc());
       console.log(`TDT Lot Size ${tdtLotSize}, Deposit State: ${depositState}, Collateral Ratio: ${Number(r)}`)
 
+
+      // "AWAITING_SIGNER_SETUP",
+      // "AWAITING_BTC_FUNDING_PROOF",
+      // "FAILED_SETUP",
+      // "ACTIVE",  // includes courtesy call
+      // "AWAITING_WITHDRAWAL_SIGNATURE",
+      // "AWAITING_WITHDRAWAL_PROOF",
+      // "REDEEMED",
+      // "COURTESY_CALL",
+      // "FRAUD_LIQUIDATION_IN_PROGRESS",
+      // "LIQUIDATION_IN_PROGRESS",
+      // "LIQUIDATED"
+
       if(depositState == 'REDEEMED'){
         metricsObj.redeemStats.set({ deposit_state: `${depositState}`, deposit_id: String(d.address)  }, Number(Number(tdtLotSize)))
+        metricsObj.collateralStats.set({ deposit_state: `ACTIVE`, lot_size: Number(tdtLotSize), deposit_id: String(d.address)  }, Number(r))
+        metricsObj.collateralStats.set({ deposit_state: `AWAITING_WITHDRAWAL_SIGNATURE`, lot_size: Number(tdtLotSize), deposit_id: String(d.address)  }, Number(r))
+        metricsObj.collateralStats.set({ deposit_state: `AWAITING_WITHDRAWAL_PROOF`, lot_size: Number(tdtLotSize), deposit_id: String(d.address)  }, Number(r))
       }else if(depositState == 'ACTIVE'){
         metricsObj.collateralStats.set({ deposit_state: `${depositState}`, lot_size: Number(tdtLotSize), deposit_id: String(d.address)  }, Number(r))
+      }else{
+        metricsObj.collateralStats.set({ deposit_state: `ACTIVE`, lot_size: Number(tdtLotSize), deposit_id: String(d.address)  }, 0)
+        metricsObj.collateralStats.set({ deposit_state: `${depositState}`, lot_size: Number(tdtLotSize), deposit_id: String(d.address)  }, Number(r))
+
       }
       
       // if (depositState == 'REDEEMED'){ 
