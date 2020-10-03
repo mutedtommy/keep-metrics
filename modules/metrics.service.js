@@ -117,6 +117,7 @@ const keepDetails = async (keepIds, objList, metricsObj) => {
         metricsObj.collateralStats.set({ deposit_state: `ACTIVE`, lot_size: Number(tdtLotSize), deposit_id: String(d.address)  }, Number(r))
         metricsObj.collateralStats.set({ deposit_state: `AWAITING_WITHDRAWAL_SIGNATURE`, lot_size: Number(tdtLotSize), deposit_id: String(d.address)  }, Number(r))
         metricsObj.collateralStats.set({ deposit_state: `AWAITING_WITHDRAWAL_PROOF`, lot_size: Number(tdtLotSize), deposit_id: String(d.address)  }, Number(r))
+        metricsObj.collateralStats.set({ deposit_state: `COURTESY_CALL`, lot_size: Number(tdtLotSize), deposit_id: String(d.address)  }, Number(r))
       }else if(depositState == 'ACTIVE'){
         metricsObj.collateralStats.set({ deposit_state: `${depositState}`, lot_size: Number(tdtLotSize), deposit_id: String(d.address)  }, Number(r))
       }else{
