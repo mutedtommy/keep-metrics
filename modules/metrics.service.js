@@ -5,15 +5,6 @@ const BigNumber = require('bignumber.js');
 const satoshiBitcoinTs = require("satoshi-bitcoin-ts");
 
 
-// const objList = {
-//   stakingContract: staking, 
-//   tokenGrantContract: keepTokenGrant, 
-//   Web3Obj: web3,
-//   tokenContract: keepToken,
-//   managedGrantFactoryContract: managedGrantFactory,
-//   managedGrantContract: managedGrant
-// }
-
 const states = [
 	"START",
 	"AWAITING_SIGNER_SETUP",
@@ -120,85 +111,20 @@ const keepDetails = async (keepIds, objList, metricsObj) => {
         metricsObj.collateralStats.set({ deposit_state: `COURTESY_CALL`, lot_size: Number(tdtLotSize), deposit_id: String(d.address)  }, Number(r))
       }else if(depositState == 'ACTIVE'){
         metricsObj.collateralStats.set({ deposit_state: `${depositState}`, lot_size: Number(tdtLotSize), deposit_id: String(d.address)  }, Number(r))
+        metricsObj.collateralStats.set({ deposit_state: `AWAITING_SIGNER_SETUP`, lot_size: Number(tdtLotSize), deposit_id: String(d.address)  }, 0)
+        metricsObj.collateralStats.set({ deposit_state: `AWAITING_BTC_FUNDING_PROOF`, lot_size: Number(tdtLotSize), deposit_id: String(d.address)  }, 0)       
+              // "AWAITING_SIGNER_SETUP",
+      // "AWAITING_BTC_FUNDING_PROOF",
       }else{
         metricsObj.collateralStats.set({ deposit_state: `ACTIVE`, lot_size: Number(tdtLotSize), deposit_id: String(d.address)  }, 0)
         metricsObj.collateralStats.set({ deposit_state: `${depositState}`, lot_size: Number(tdtLotSize), deposit_id: String(d.address)  }, Number(r))
 
       }
-      
-      // if (depositState == 'REDEEMED'){ 
-      //   //metricsObj.redeemGauge.set(1)
-      //   //metricsObj.redeemGauge.set({ deposit_state: `${depositState}` }, Number(tdtLotSize))
-      //   metricsObj.redeemStats.labels(depositState).inc(Number(tdtLotSize))
-      // }else if(depositState == 'FAILED_SETUP'){
-      //   metricsObj.redeemStats.labels(depositState).inc(Number(tdtLotSize))
-      // }else if(depositState == 'LIQUIDATED'){
-      //   metricsObj.redeemStats.labels(depositState).inc(Number(tdtLotSize))
-      // }else{
-      //   metricsObj.collateralStats.set({ deposit_state: `${depositState}`, lot_size: Number(tdtLotSize), deposit_id: String(d.address)  }, Number(r))
-      //   //metricsObj.redeemGauge.labels(`${String(depositState)}`).observe(Number(tdtLotSize))
-      // }
+
   }
   metricsObj.openKeeps.set(Number(openCounter));
   metricsObj.closedKeeps.set(Number(closedCounter));
 }
-
-
-
-
-// const lotSizes = async (objList) => {
-//   const tbtcSystemContract = objList.tbtcSystemContract;
-//   const ethers = objList.ethers;
-//   const lotSizes = await tbtcSystemContract.getAllowedLotSizes();
-//   const returnLotSizes = [];
-
-//   for(var i=0; i<=lotSizes.length; i++){
-//     returnLotSizes[i] = ethers.utils.formatEther(lotSizes[i])
-//   }
-
-//   // const [
-//   //   minLotSize
-//   // ] = await Promise.all([
-//   //   contractService.makeCall(
-//   //     tbtcSystemContract,
-//   //     "getMinimumLotSize"
-//   //   )
-//   // ])
-//   // let rawvalue = new BigNumber(parseInt(minLotSize));
-//   // let btcValue = satoshiBitcoinTs.toBitcoin(rawvalue.toNumber());
-//   // let value = rawvalue.div(10 ** 8).toNumber();
-//   return returnLotSizes;
-// }
-
-const collateralRatio = async (objList) => {
-
-  // stakingContract: staking, 
-  // operatorContract: operator,
-  // Web3Obj: web3,
-  // tbtcContract: tbtc,
-  // tbtcSystemContract: tbtcSystem,
-  // depositContract: deposit,
-  // cache: cache,
-  // promClient: promClient
-
-  // const deposit = objList.depositContract;
-  // const tbtcSystemContract = objList.tbtcSystemContract;
-  // const web3 = objList.Web3Obj;
-
-  // const [
-  //   maxLotSize
-  // ] = await Promise.all([
-  //   contractService.makeCall(
-  //     tbtcSystemContract,
-  //     "getMaximumLotSize"
-  //   )
-  // ])
-  // let rawvalue = new BigNumber(parseInt(maxLotSize));
-  // let btcValue = satoshiBitcoinTs.toBitcoin(rawvalue.toNumber());
-  // let value = rawvalue.div(10 ** 8).toNumber();
-  // return btcValue;
-}
-
 
 
 module.exports = {

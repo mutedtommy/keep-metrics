@@ -43,7 +43,6 @@ var routes = function (objList) {
 
 
     const register = objList.promClient.register;
-    //const register = require('prom-client/lib/registry')
     tbtcRouter.get('/metrics', async (req, res) => {
         const metricsObj = {
             tBTCSupplyGauge: tBTCSupplyGauge,
@@ -71,11 +70,7 @@ var routes = function (objList) {
 async function setMetrics(contractsObj, metricsObj){
     const totalSupply = await metricsService.mintedTbtc(contractsObj, metricsObj);
     metricsObj.tBTCSupplyGauge.set(Number(totalSupply));
-
     const myKeeps = await metricsService.myKeeps(contractsObj, metricsObj);
-    //const lotSizes = await metricsService.lotSizes(contractsObj);
-    //metricsObj.keepsGauge.set(myKeeps);
-    //metricsObj.collateralHistogram.observe(145)
 }
 
 module.exports = routes;
